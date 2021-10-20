@@ -1,25 +1,34 @@
 import logo from './logo.svg';
-import './App.css';
+import './App.scss';
+import {Card} from './Components/Card';
+const axios = require('axios')
+const URL_CHARACTERS = 'https://rickandmortyapi.com/api/character';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+const App = async () => {
+  try {
+    const characters = await axios.get(URL_CHARACTERS);
+    console.log("Datos->", characters);
+    let data = JSON.parse(characters);
+    console.log("Esta es la info-> ", data['info'])
+    return (
+        <>
+          <h1>Ejercicio 4</h1>
+          <div className='container'>
+            {data.map((element) => (
+                <Card
+                    name={element.name}
+                    img={element.image}
+                    gender={element.gender}
+                    status={element.status}
+                    key={element.id}
+                />
+            ))}
+          </div>
+        </>
+    );
+  } catch (e) {
+    console.error(e)
+  }
 }
 
-export default App;
+export {App};
